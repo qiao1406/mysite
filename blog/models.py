@@ -1,8 +1,16 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Article(models.Model):
+    # 作者
+    author = models.ForeignKey(
+        User,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='articles'
+    )
     # 标题
     title = models.CharField(max_length=100)
     # 正文
