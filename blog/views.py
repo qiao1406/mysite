@@ -1,7 +1,8 @@
 from rest_framework import generics
+from rest_framework import viewsets
 
 from .models import Article
-from .serializers import ArticleListSerializer, ArticleDetailSerializer
+from .serializers import ArticleListSerializer, ArticleDetailSerializer, ArticleSerializer
 from .permissions import IsAdminUserOrReadOnly
 
 
@@ -19,3 +20,11 @@ class ArticleList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)

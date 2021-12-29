@@ -22,3 +22,11 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
+
+
+class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+    author = UserDescSerializer(read_only=True)
+
+    class Meta:
+        model = Article
+        fields = '__all__'
