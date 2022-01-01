@@ -1,9 +1,12 @@
 <template>
   <div>
     <div v-for="article in info.results" v-bind:key="article.url" id="articles">
-      <div class="article-title">
+      <router-link
+        :to="{ name: 'ArticleDetail', params: { id: article.id } }"
+        class="article-title"
+      >
         {{ article.title }}
-      </div>
+      </router-link>
       <div>
         {{ formatted_time(article.created) }}
       </div>
