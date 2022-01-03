@@ -22,10 +22,10 @@ from blog import views
 
 router = DefaultRouter()
 router.register('article', views.ArticleViewSet)
+router.register('category', views.CategoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
 ]

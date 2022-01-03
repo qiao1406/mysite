@@ -1,8 +1,9 @@
 from rest_framework import generics
 from rest_framework import viewsets
+from rest_framework.response import Response
 
-from .models import Article
-from .serializers import ArticleListSerializer, ArticleDetailSerializer, ArticleSerializer, ArticleDetailSerializer
+from .models import Article, Category
+from .serializers import ArticleListSerializer, ArticleSerializer, ArticleDetailSerializer, CategorySerializer, CategoryDetailSerializer
 from .permissions import IsAdminUserOrReadOnly
 
 
@@ -35,3 +36,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
             return ArticleSerializer
         else:
             return ArticleDetailSerializer
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAdminUserOrReadOnly]
+
+    def get_serializer_class(self):
+        return CategorySerializer if self.action == 'list' else CategoryDetailSerializer

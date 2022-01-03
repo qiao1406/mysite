@@ -4,6 +4,18 @@ from django.contrib.auth.models import User
 from markdown import Markdown
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    created = models.DateTimeField(default=timezone.now)
+    description = models.CharField(max_length=100, default='')
+
+    class Meta:
+        ordering = ['-created']
+    
+    def __str__(self):
+        return self.name
+
+
 class Article(models.Model):
     # 作者
     author = models.ForeignKey(
@@ -20,6 +32,15 @@ class Article(models.Model):
     created = models.DateTimeField(default=timezone.now)
     # 更新时间
     updated = models.DateTimeField(auto_now=True)
+    # 文章类别
+    category = models.ForeignKey(
+        Category,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='articles',
+        db_constraint=False
+    )
 
     class Meta:
         ordering = ['-created']
