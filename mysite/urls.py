@@ -23,6 +23,7 @@ from blog import views
 router = DefaultRouter()
 router.register('article', views.ArticleViewSet)
 router.register('category', views.CategoryViewSet)
+router.register('tag', views.TagViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

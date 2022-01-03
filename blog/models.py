@@ -16,6 +16,13 @@ class Category(models.Model):
         return self.name
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Article(models.Model):
     # 作者
     author = models.ForeignKey(
@@ -32,7 +39,7 @@ class Article(models.Model):
     created = models.DateTimeField(default=timezone.now)
     # 更新时间
     updated = models.DateTimeField(auto_now=True)
-    # 文章类别
+    # 文章类别，一篇文章只能属于一个类别
     category = models.ForeignKey(
         Category,
         null=True,
@@ -41,6 +48,13 @@ class Article(models.Model):
         related_name='articles',
         db_constraint=False
     )
+    # 文章标签，一篇文章可以有很多个标签
+    tags = models.ManyToManyField(
+        Tag,
+        blank=True,
+        related_name='articles'
+    )
+
 
     class Meta:
         ordering = ['-created']
