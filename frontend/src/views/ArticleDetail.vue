@@ -10,6 +10,18 @@
           发布于
           {{ formatted_time(article.created) }}
         </p>
+        <div>
+          文章分类：
+          <a :href="article.category ? article.category.url : ''">
+            {{ article.category ? article.category.name : "无" }}
+          </a>
+        </div>
+        <div>
+          {{ article.tags.length > 0 ? "标签：" : "" }}
+          <span v-for="tag in article.tags" v-bind:key="tag" class="tag">
+            {{ tag }}
+          </span>
+        </div>
         <div v-html="article.body_html" class="article-body"></div>
       </div>
       <div>
@@ -34,9 +46,10 @@ export default {
     };
   },
   mounted() {
-    axios
-      .get("/api/article/" + this.$route.params.id)
-      .then((response) => (this.article = response.data));
+    axios.get("/api/article/" + this.$route.params.id).then((response) => {
+      this.article = response.data;
+      console.log(this.article);
+    });
   },
   methods: {
     formatted_time: function (iso_date_string) {
