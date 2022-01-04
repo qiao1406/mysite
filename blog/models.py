@@ -11,7 +11,7 @@ class Category(models.Model):
 
     class Meta:
         ordering = ['-created']
-    
+
     def __str__(self):
         return self.name
 
@@ -55,7 +55,6 @@ class Article(models.Model):
         related_name='articles'
     )
 
-
     class Meta:
         ordering = ['-created']
 
@@ -68,3 +67,21 @@ class Article(models.Model):
                                   'markdown.extensions.toc', ])
         md_body = md.convert(self.body)
         return md_body, md.toc
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='comments'
+    )
+    article = models.ForeignKey(
+        Article,
+        on_delete=models.CASCADE,
+        null=False,
+        related_name='comments'
+    )
+    body = models.TextField(max_length=1024)
+    created = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(auto_now=True)

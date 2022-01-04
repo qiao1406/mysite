@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Article, Category, Tag
+from .models import Article, Category, Tag, Comment
 from user_info.serializers import UserDescSerializer
 
 
@@ -86,10 +86,18 @@ class ArticleBaseSerializer(serializers.HyperlinkedModelSerializer):
                     Tag.objects.create(name=name)
         return super().to_internal_value(data)
 
+        
+class CommentArticleDetailSerializer(serializers.ModelSerializer):
+    """文章详情页中展现评论的序列化器"""
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
 
 class ArticleDetailSerializer(ArticleBaseSerializer):
     body_html = serializers.SerializerMethodField()
     toc_html = serializers.SerializerMethodField()  # 目录
+    comments = CommentArticleDetailSerializer(many=True, read_only=True)
 
     def get_body_html(self, obj):
         return obj.get_md()[0]
@@ -108,3 +116,18 @@ class ArticleSerializer(ArticleBaseSerializer):
         model = Article
         fields = '__all__'
         extra_kwargs = {'body': {'write_only': True}}
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = UserDescSerializer(read_only=True)
+    article_id = serializers.IntegerField(write_only=True, allow_null=False, required=True)
+    article = ArticleSerializer(read_only=True)
+
+    def validate_article_id(self, value):
+        if not Article.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Article with id {} not exists.".format(value))
+        return value
+
+    class Meta:
+        model = Comment
+        fields = '__all__'

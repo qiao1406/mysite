@@ -25,6 +25,7 @@ router = DefaultRouter()
 router.register('article', views.ArticleViewSet)
 router.register('category', views.CategoryViewSet)
 router.register('tag', views.TagViewSet)
+router.register('comment', views.CommentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -2,8 +2,8 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from .models import Article, Category, Tag
-from .serializers import ArticleListSerializer, ArticleSerializer, ArticleDetailSerializer, CategorySerializer, CategoryDetailSerializer, TagSeralizer
+from .models import Article, Category, Tag, Comment
+from .serializers import ArticleListSerializer, ArticleSerializer, ArticleDetailSerializer, CategorySerializer, CategoryDetailSerializer, TagSeralizer, CommentSerializer
 from .permissions import IsAdminUserOrReadOnly
 
 
@@ -51,3 +51,9 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSeralizer
     permission_classes = [IsAdminUserOrReadOnly]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    
